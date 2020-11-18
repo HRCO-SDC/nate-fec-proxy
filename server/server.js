@@ -11,3 +11,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.listen(port, () => {
   console.log(`server running at: http://localhost:${port}`);
 });
+
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/public/index.html'), err => {
+    if (err) {
+      res.status(500).send(err);
+    }
+  });
+});
