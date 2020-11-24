@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useRouteMatch } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import SearchBar from './components/SearchBar/SearchBar.jsx';
@@ -21,7 +22,9 @@ const QuestionsAndAnswers = function(props) {
   // Perform GET request again when helpCount updates
   useEffect(() => {
     let isMounted = true; // Keep track of whether component is mounted
-    const id = props.match.params.id; // React router provides id in props
+    console.log('test');
+    console.log(window.location.pathname);
+    const id = props.match.params.id || '25'; // React router provides id in props
     // Get questions from API & set state only if the component is still mounted
     axios.get(`http://52.26.193.201:3000/qa/${id}`)
       .then(response => {
@@ -41,7 +44,11 @@ const QuestionsAndAnswers = function(props) {
       .catch(error => console.log(error));
     // This callback fires when the component unmounts to prevent attempts at changing state after the component unmounts
     return () => { isMounted = false };
-  }, [helpCount]);
+  }, [helpCount, props.match.params.id]);
+
+  useEffect(() => {
+    console.log('url changed!');
+  }, [props]);
 
   const updateHelp = function() {
     setHelpCount(prev => prev + 1);
